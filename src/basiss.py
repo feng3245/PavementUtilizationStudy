@@ -156,7 +156,12 @@ def load_files_universal(file_list_loc, nbands=3, n_classes=2,
         # read in first row to get shape
         [im_test_root, im_test_file, im_vis_file, mask_file, \
                                              mask_vis_file] = df.iloc[0]
-        sat = load_multiband_im(im_test_file, nbands=nbands)
+	print(os.path.dirname(__file__))
+	print(os.getcwd())
+	print(im_test_file)
+	print(nbands)
+	print(os.path.join( os.path.dirname(__file__), im_test_file))
+	sat = load_multiband_im( im_test_file, nbands=nbands)
         h, w, _ = sat.shape
     # set shapes
     im_shape = (N, h, w, nbands)
@@ -218,7 +223,7 @@ def load_files_universal(file_list_loc, nbands=3, n_classes=2,
             resize_size = (h,w)
             
         # resize
-        im_resize = cv2.resize(sat, resize_size)
+        im_resize = cv2.resize(sat, (resize_size[1], resize_size[0]))
         
         if export_im_vis_arr:
             im_vis_resize = cv2.resize(sat_vis, resize_size)
@@ -227,9 +232,11 @@ def load_files_universal(file_list_loc, nbands=3, n_classes=2,
 
         # make mask of appropriate dept (include background channel)
         if n_classes == 2:
-            roads_resize = cv2.resize(mask, resize_size)
+            roads_resize = cv2.resize(mask, (resize_size[1],resize_size[0]))
+	    print(roads_resize)
             bg_resize = np.array(np.ones(resize_size) \
                                  - roads_resize).astype(int)
+	    print(bg_resize)
             mask_resize = np.stack((bg_resize, roads_resize), axis=2)
             #mask_vis_resize = np.stack((bg_resize, roads_resize), axis=2)
         elif n_classes == 1:
@@ -412,7 +419,7 @@ def unet(input_shape, n_classes=2, kernel=3, loss='binary_crossentropy',
     conv5 = Conv2D(512, (kernel, kernel), activation='relu', padding='same')(conv5)
 
     up6 = concatenate([Conv2DTranspose(256, (2, 2), strides=(2, 2), padding='same')(conv5), conv4], axis=3)
-    #up6 = merge([UpSampling2D(size=(2, 2))(conv5), conv4], mode='concat', concat_axis=1)
+    
     conv6 = Conv2D(256, (kernel, kernel), activation='relu', padding='same')(up6)
     conv6 = Conv2D(256, (kernel, kernel), activation='relu', padding='same')(conv6)
 

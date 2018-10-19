@@ -1,1 +1,2 @@
-./data/, PaltoSanjose.png, PaltoSanjoseResult.png, ./labels/PaltoSanjose.png, ./labels/PaltoSanjoseResult.png
+testpath, testimage, testimageresult, mask, maskresult
+./data,./data/PaltoSanjose.png,./result/PaltoSanjose.png,./labels/PaltoSanjose.png,./result/labels/PaltoSanjose.png
