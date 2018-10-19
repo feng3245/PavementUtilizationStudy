@@ -813,7 +813,7 @@ def main():
             
             print ("Time to fit model:", time.time() - t3, "seconds")
             model.save(model_name_f)
-            
+            print('Model finished saving!')            
         ####################
         # Test
         elif args.mode.upper() == 'TEST':
